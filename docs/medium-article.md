@@ -1,6 +1,6 @@
-# Cloud KMS on GCP, Hands-On: Encrypt, Rotate, Sign and Verify With Your Own Keys
+# GCP Cloud KMS Explained With Real Demos
 
-*Subtitle: A practical walkthrough of symmetric encryption, asymmetric encryption, digital signatures and MAC signatures in Google Cloud KMS, with every command and screenshot.*
+### Encryption, Key Rotation, CMEK, Digital Signatures and MAC
 
 **Tags:** Google Cloud, Cloud KMS, Encryption, Cloud Security, DevOps
 
