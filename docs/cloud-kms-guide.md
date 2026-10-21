@@ -1,4 +1,4 @@
-# Cloud KMS Hands-On Guide (SOP)
+# Cloud KMS Hands-On Guide
 
 Step-by-step procedure for the four Cloud KMS demos in this lab: symmetric encryption, asymmetric encryption, digital signatures and MAC signatures. Every step lists the console action, the command, the expected result and the matching screenshot.
 
