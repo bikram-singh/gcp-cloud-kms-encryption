@@ -6,6 +6,9 @@
 
 A practical walkthrough of Google Cloud KMS, built from scratch and proved with real commands: symmetric encryption, key rotation and key versions, a Cloud Storage bucket protected with a customer-managed key, what happens when you disable that key, asymmetric encryption, digital signatures and MAC signatures. Every step is backed by screenshots from the GCP Console and Cloud Shell.
 
+![GCP Cloud KMS architecture](https://raw.githubusercontent.com/bikram-singh/gcp-cloud-kms-encryption/main/docs/snapshots/00-architecture/gcp-cloud-kms-architecture.png)
+*What the demo built and tested: one key ring, four keys, and the steps (including the failures) for each*
+
 ---
 
 ## ❓ Why Cloud KMS?
@@ -23,7 +26,7 @@ KMS keys come in four flavours, and the docs describe them separately. I wanted 
 - 🧬 **Keys:** four, one per purpose: `symmetric-key`, `asymmetric-key-decrypt`, `asymmetric-sign` and `mac-key`
 - 🔐 **Protection level:** Software
 - 🔄 **Rotation:** every 90 days on the symmetric key, plus a manual rotation in the demo
-- ⏳ **Scheduled destruction:** 10 days (the default is 30)
+- ⏳ **Scheduled destruction:** 10 days on the symmetric, asymmetric decrypt and MAC keys (the default is 30)
 - 🪣 **CMEK target:** a Cloud Storage bucket, `cloud-kms-demo-bucket`
 - 🛠️ **Tooling:** GCP Console, Cloud Shell, `gcloud`, `gsutil` and `openssl`
 - 📸 **Evidence:** 50 real screenshots in the repository

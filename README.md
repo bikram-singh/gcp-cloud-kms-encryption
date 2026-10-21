@@ -18,6 +18,8 @@
 
 📝 **Companion article on Medium:** *GCP Cloud KMS Explained With Real Demos: Encryption, Key Rotation, CMEK, Digital Signatures and MAC* (add the link here once published)
 
+![gcp-cloud-kms-encryption architecture](docs/snapshots/00-architecture/gcp-cloud-kms-architecture.png)
+
 </div>
 
 ---
@@ -66,7 +68,7 @@ This lab walks through **all four things you can do with a KMS key**, in the ord
 | 🔐 **Protection level** | Software (HSM and External are shown in the console) |
 | 🧬 **Keys created** | 4: `symmetric-key`, `asymmetric-key-decrypt`, `asymmetric-sign`, `mac-key` |
 | 🔄 **Rotation** | Symmetric key every **90 days**, plus a manual rotation in the demo |
-| ⏳ **Scheduled destruction** | **10 days** (the default is 30) |
+| ⏳ **Scheduled destruction** | **10 days** on the symmetric, asymmetric decrypt and MAC keys (the default is 30) |
 | 🪣 **CMEK target** | Cloud Storage bucket `cloud-kms-demo-bucket` |
 | 🛠️ **Tooling** | GCP Console, Cloud Shell, `gcloud`, `gsutil`, `openssl` |
 | 📸 **Evidence** | 50 real console and Cloud Shell screenshots, sorted by step in [`docs/snapshots/`](docs/snapshots) |
@@ -235,6 +237,7 @@ gcp-cloud-kms-encryption/
 │   ├── cloud-kms-guide.md                   # Step-by-step SOP with commands and screenshots
 │   ├── medium-article.md                    # Article draft (image links use raw GitHub URLs)
 │   └── snapshots/                           # Real console and Cloud Shell screenshots
+│       ├── 00-architecture/                 #   architecture diagram
 │       ├── 01-symmetric-key-creation/       #  11 screenshots
 │       ├── 02-symmetric-encrypt-decrypt/    #   2 screenshots
 │       ├── 03-key-rotation/                 #   5 screenshots
@@ -994,6 +997,7 @@ Real screenshots taken directly from the Google Cloud Console and Cloud Shell wh
 
 | Folder | Step | Files |
 |---|---|---|
+| `00-architecture` | Architecture diagram | 1 |
 | `01-symmetric-key-creation` | API, key ring, symmetric key | 11 |
 | `02-symmetric-encrypt-decrypt` | Encrypt and decrypt in Cloud Shell | 2 |
 | `03-key-rotation` | Rotation and key versions | 5 |
