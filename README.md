@@ -2,7 +2,7 @@
 
 Hands-on lab covering the four things you can do with Google Cloud KMS keys: **symmetric encryption**, **asymmetric encryption**, **digital signatures** and **MAC signatures**. It also shows key rotation, key versions, CMEK on Cloud Storage and what happens when a key is disabled.
 
-   Companion article on Medium: [Cloud KMS on GCP, Hands-On: Encrypt, Rotate, Sign and Verify With Your Own Keys](https://medium.com/@YOUR_HANDLE/YOUR-ARTICLE-SLUG)
+
 ## What you will build
 
 ```mermaid
@@ -40,16 +40,15 @@ gcp-cloud-kms-encryption/
 │   ├── cloud-kms-guide.md          # Full step-by-step SOP with screenshots
 │   ├── medium-article.md           # Article draft (image links use raw GitHub URLs)
 │   └── snapshots/
-│       ├── 01-kms-theory/
-│       ├── 02-symmetric-key-creation/
-│       ├── 03-symmetric-encrypt-decrypt/
-│       ├── 04-key-rotation/
-│       ├── 05-cmek-cloud-storage/
-│       ├── 06-key-disable-impact/
-│       ├── 07-asymmetric-key-creation/
-│       ├── 08-asymmetric-encrypt-decrypt/
-│       ├── 09-digital-signatures/
-│       └── 10-mac-signatures/
+│       ├── 01-symmetric-key-creation/
+│       ├── 02-symmetric-encrypt-decrypt/
+│       ├── 03-key-rotation/
+│       ├── 04-cmek-cloud-storage/
+│       ├── 05-key-disable-impact/
+│       ├── 06-asymmetric-key-creation/
+│       ├── 07-asymmetric-encrypt-decrypt/
+│       ├── 08-digital-signatures/
+│       └── 09-mac-signatures/
 └── scripts/
     ├── 00-env.sh                    # location, key ring, work folder
     ├── 01-symmetric.sh
@@ -102,8 +101,7 @@ Then destroy the demo key versions in *Security → Key Management*. Active key 
 
 ## Notes
 
-- Screenshots show the demo project, so replace the project ID with your own when you reproduce the lab. Do not commit real keys, ciphertext or secrets.
-- Theory slides in `01-kms-theory` come from the source video series linked at the end of the guide.
+- Screenshots are from the GCP Console and Cloud Shell. They show the demo project, so replace the project ID with your own when you reproduce the lab. Do not commit real keys, ciphertext or secrets.
 
 ## Author
 

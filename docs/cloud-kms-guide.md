@@ -11,7 +11,7 @@ Step-by-step procedure for the four Cloud KMS demos in this lab: symmetric encry
 ## Table of contents
 
 1. [Prerequisites](#1-prerequisites)
-2. [Theory in five minutes](#2-theory-in-five-minutes)
+2. [Key concepts](#2-key-concepts)
 3. [Part 1: Symmetric encryption](#3-part-1-symmetric-encryption)
    - 3.1 Create the key ring and key
    - 3.2 Encrypt and decrypt
@@ -40,15 +40,13 @@ Step-by-step procedure for the four Cloud KMS demos in this lab: symmetric encry
 
 **Enable the API** from *Marketplace → Cloud Key Management Service (KMS) API → Enable*, or run `gcloud services enable cloudkms.googleapis.com`.
 
-![Enable the Cloud KMS API](snapshots/02-symmetric-key-creation/01-enable-kms-api.png)
+![Enable the Cloud KMS API](snapshots/01-symmetric-key-creation/01-enable-kms-api.png)
 
 ---
 
-## 2. Theory in five minutes
+## 2. Key concepts
 
 Cloud KMS lets you create and manage encryption keys for Google Cloud services and your own applications. You can generate software or hardware keys, import existing keys, or link keys held in an external key manager (EKM). You can also use KMS keys to create and verify digital signatures or message authentication codes (MACs).
-
-![Cloud KMS overview](snapshots/01-kms-theory/01-kms-overview.png)
 
 ### Default encryption vs customer-managed keys
 
@@ -59,8 +57,6 @@ Cloud KMS lets you create and manage encryption keys for Google Cloud services a
 | CMEK, imported keys | You | You import key material and rotate by importing new versions |
 | CMEK, Cloud HSM | You, in Cloud KMS | Keys live in FIPS 140-2 Level 3 HSMs |
 | CMEK, Cloud EKM | You, outside Google | Keys stay in an external key manager |
-
-![Protecting data in Google Cloud](snapshots/01-kms-theory/02-google-cloud-encryption-options.png)
 
 ### Key purposes
 
@@ -74,13 +70,9 @@ The purpose is chosen at key creation and cannot change. All versions of a key s
 | Asymmetric encryption | Asymmetric decrypt | `ASYMMETRIC_DECRYPT` | `asymmetricDecrypt`, `getPublicKey` |
 | MAC signing | MAC signing/verification | `MAC` | `macSign`, `macVerify` |
 
-![Key purposes](snapshots/01-kms-theory/03-key-purposes.png)
-
-### Symmetric encryption in one picture
+### Symmetric encryption in brief
 
 The same secret key encrypts and decrypts, so both sides must hold it. In KMS the key never leaves the service. You send data in, you get ciphertext back.
-
-![Symmetric key encryption](snapshots/01-kms-theory/04-symmetric-key-encryption.png)
 
 ### Cloud KMS resources
 
@@ -93,8 +85,6 @@ The same secret key encrypts and decrypts, so both sides must hold it. In KMS th
 | State | Enabled, Disabled, Scheduled for destruction or Destroyed |
 | Algorithm | Decides how key material is created and which operations are possible |
 
-![Cloud KMS resources](snapshots/01-kms-theory/05-kms-resources.png)
-
 ---
 
 ## 3. Part 1: Symmetric encryption
@@ -103,7 +93,7 @@ The same secret key encrypts and decrypts, so both sides must hold it. In KMS th
 
 **Step 1. Create the key ring.** Go to *Security → Key Management → Key rings → Create key ring*. Name it `test-ring` and choose the location `us-central1`.
 
-![Create key ring](snapshots/02-symmetric-key-creation/02-create-key-ring.png)
+![Create key ring](snapshots/01-symmetric-key-creation/02-create-key-ring.png)
 
 > A key ring is tied to its location and cannot be deleted later, so choose names and locations deliberately.
 
@@ -114,33 +104,33 @@ The same secret key encrypts and decrypts, so both sides must hold it. In KMS th
 | Key name | `symmetric-key` |
 | Protection level | Software |
 
-![Key name and protection level](snapshots/02-symmetric-key-creation/03-key-name-and-protection-level.png)
+![Key name and protection level](snapshots/01-symmetric-key-creation/03-key-name-and-protection-level.png)
 
 Protection level choices are *Software*, *HSM* and *External*. Choosing *External* asks for the EKM connection type (via internet or via VPC), which needs an external key manager that you do not have in this demo.
 
-![External protection level](snapshots/02-symmetric-key-creation/04-protection-level-external-ekm.png)
+![External protection level](snapshots/01-symmetric-key-creation/04-protection-level-external-ekm.png)
 
 **Step 3. Key material.** Choose *Generated key*. The alternative, *Imported key*, is for bringing your own key material.
 
-![Key material](snapshots/02-symmetric-key-creation/05-key-material-generated-or-imported.png)
+![Key material](snapshots/01-symmetric-key-creation/05-key-material-generated-or-imported.png)
 
 **Step 4. Purpose and algorithm.** The dropdown offers symmetric encrypt/decrypt, raw symmetric encrypt/decrypt, asymmetric sign, asymmetric decrypt and MAC signing/verification. Choose **Symmetric encrypt/decrypt**, which gives the algorithm *Google symmetric key*.
 
-![Purpose dropdown](snapshots/02-symmetric-key-creation/06-purpose-dropdown.png)
-![Symmetric purpose and algorithm](snapshots/02-symmetric-key-creation/07-symmetric-purpose-and-algorithm.png)
+![Purpose dropdown](snapshots/01-symmetric-key-creation/06-purpose-dropdown.png)
+![Symmetric purpose and algorithm](snapshots/01-symmetric-key-creation/07-symmetric-purpose-and-algorithm.png)
 
 **Step 5. Rotation.** Options are 30, 90, 180 or 365 days, *Never (manual rotation)* or a custom period. This demo uses **90 days**.
 
-![Rotation period options](snapshots/02-symmetric-key-creation/08-rotation-period-options.png)
-![Rotation summary](snapshots/02-symmetric-key-creation/09-rotation-summary-90-days.png)
+![Rotation period options](snapshots/01-symmetric-key-creation/08-rotation-period-options.png)
+![Rotation summary](snapshots/01-symmetric-key-creation/09-rotation-summary-90-days.png)
 
 **Step 6. Scheduled destruction duration.** When a key version is destroyed it first sits in *scheduled for destruction* and can still be restored. The default is 30 days. This demo sets **10 days**. Click *Create*.
 
-![Destruction delay](snapshots/02-symmetric-key-creation/10-scheduled-destruction-delay-10-days.png)
+![Destruction delay](snapshots/01-symmetric-key-creation/10-scheduled-destruction-delay-10-days.png)
 
 **Result.** `symmetric-key` shows as *Available*, with protection level *Software* and purpose *Symmetric encrypt/decrypt*.
 
-![Key available](snapshots/02-symmetric-key-creation/11-key-available-in-key-ring.png)
+![Key available](snapshots/01-symmetric-key-creation/11-key-available-in-key-ring.png)
 
 ### 3.2 Encrypt and decrypt
 
@@ -164,7 +154,7 @@ gcloud kms encrypt \
 
 `cat encrypt.txt` now shows unreadable binary output. That is the ciphertext.
 
-![Encrypt with gcloud](snapshots/03-symmetric-encrypt-decrypt/01-encrypt-with-gcloud.png)
+![Encrypt with gcloud](snapshots/02-symmetric-encrypt-decrypt/01-encrypt-with-gcloud.png)
 
 **Decrypt**
 
@@ -181,7 +171,7 @@ cat decrypt.txt     # Welcome to Cloud KMS Demo
 
 You do not pass a key version. KMS reads the version from the ciphertext metadata.
 
-![Decrypt with gcloud](snapshots/03-symmetric-encrypt-decrypt/02-decrypt-with-gcloud.png)
+![Decrypt with gcloud](snapshots/02-symmetric-encrypt-decrypt/02-decrypt-with-gcloud.png)
 
 ### 3.3 Rotate the key
 
@@ -189,15 +179,15 @@ Rotation creates a new key version so that new data is encrypted with fresh key 
 
 **Step 1.** Open the key, then the **Versions** tab. Version 1 is *Enabled & primary*. Click **Rotate key**.
 
-![Versions tab](snapshots/04-key-rotation/01-versions-tab-and-rotate-key.png)
+![Versions tab](snapshots/03-key-rotation/01-versions-tab-and-rotate-key.png)
 
 **Step 2.** Read the dialog. A new version is created and made primary, and new data is encrypted with it. Older versions can still decrypt data, and data encrypted with older versions is **not** re-encrypted unless you do it yourself. Click *Rotate*.
 
-![Rotate key dialog](snapshots/04-key-rotation/02-rotate-key-dialog.png)
+![Rotate key dialog](snapshots/03-key-rotation/02-rotate-key-dialog.png)
 
 **Step 3.** Version 2 is now *Enabled & primary* and version 1 is *Enabled*.
 
-![Version 2 primary](snapshots/04-key-rotation/03-version-2-enabled-and-primary.png)
+![Version 2 primary](snapshots/03-key-rotation/03-version-2-enabled-and-primary.png)
 
 **Step 4. Decrypt old data after rotation.** `encrypt.txt` was created with version 1. Decrypt it again with the same command and a different output file.
 
@@ -214,11 +204,11 @@ cat decrypt-2.txt   # Welcome to Cloud KMS Demo
 
 The old ciphertext decrypts fine, because KMS picks the version that produced it.
 
-![Decrypt after rotation](snapshots/04-key-rotation/04-decrypt-old-ciphertext-after-rotation.png)
+![Decrypt after rotation](snapshots/03-key-rotation/04-decrypt-old-ciphertext-after-rotation.png)
 
 **Step 5. Change the primary version (optional).** On the versions list, open the actions menu for version 1 and choose **Make primary version**. Primary status only controls which version *new* encryptions use.
 
-![Make version 1 primary](snapshots/04-key-rotation/05-make-version-1-primary.png)
+![Make version 1 primary](snapshots/03-key-rotation/05-make-version-1-primary.png)
 
 ### 3.4 Use the key for Cloud Storage (CMEK)
 
@@ -228,23 +218,23 @@ Customer-managed encryption keys (CMEK) let Cloud Storage encrypt bucket objects
 
 **Location rule.** The key and the bucket must be in the same location. The key lives in `us-central1`, so a bucket in `us-east1` shows *"No valid keys found"* in the key picker: the filter reads *Key purpose: Symmetric Encrypt/Decrypt* and *Locations: us-east1*.
 
-![Region mismatch](snapshots/05-cmek-cloud-storage/01-bucket-region-mismatch-no-valid-keys.png)
+![Region mismatch](snapshots/04-cmek-cloud-storage/01-bucket-region-mismatch-no-valid-keys.png)
 
 **Step 2. Choose `us-central1` and select `symmetric-key`.** The console warns that the Cloud Storage service agent does not have the `cloudkms.cryptoKeyEncrypterDecrypter` role on the key. Click **Grant**. A missing service-agent binding is the most common cause of CMEK failures.
 
-![Grant service agent](snapshots/05-cmek-cloud-storage/02-grant-service-agent-encrypter-decrypter.png)
+![Grant service agent](snapshots/04-cmek-cloud-storage/02-grant-service-agent-encrypter-decrypter.png)
 
 **Step 3. Create the bucket and verify.** Under *Configuration → Protection*, **Encryption type** is *Customer-managed* and **Default encryption key** points to `…/test-ring/symmetric-key`.
 
-![Bucket encryption](snapshots/05-cmek-cloud-storage/03-bucket-encryption-customer-managed.png)
+![Bucket encryption](snapshots/04-cmek-cloud-storage/03-bucket-encryption-customer-managed.png)
 
 **Step 4. Upload objects.** Upload two files (`image016.png` and `s3.jpeg` in the demo). The **Encryption** column shows *Customer-managed* for each.
 
-![Objects encryption column](snapshots/05-cmek-cloud-storage/04-objects-encryption-column.png)
+![Objects encryption column](snapshots/04-cmek-cloud-storage/04-objects-encryption-column.png)
 
 **Step 5. Inspect an object.** Open `s3.jpeg`. *Encryption type* is *Customer-managed* and *Encryption key* shows the exact key version, here `…/cryptoKeyVersions/2`, the primary version at upload time.
 
-![Object details](snapshots/05-cmek-cloud-storage/05-object-details-key-version.png)
+![Object details](snapshots/04-cmek-cloud-storage/05-object-details-key-version.png)
 
 Listing from Cloud Shell works as normal because encryption is transparent to authorised users:
 
@@ -252,7 +242,7 @@ Listing from Cloud Shell works as normal because encryption is transparent to au
 gsutil ls gs://cloud-kms-demo-bucket/
 ```
 
-![gsutil ls](snapshots/05-cmek-cloud-storage/06-gsutil-list-objects.png)
+![gsutil ls](snapshots/04-cmek-cloud-storage/06-gsutil-list-objects.png)
 
 ### 3.5 What happens when the key is disabled
 
@@ -260,15 +250,15 @@ This is the demo that shows why CMEK gives you a kill switch.
 
 **Step 1. Disable the key versions.** Disable both versions from the Versions tab. The key status turns to *Not available* with the message *"To operate on data with this key, enable primary version or select a new primary version."*
 
-![Key not available](snapshots/06-key-disable-impact/02-key-status-not-available.png)
+![Key not available](snapshots/05-key-disable-impact/02-key-status-not-available.png)
 
 **Step 2. Try to encrypt.** The CLI fails with `FAILED_PRECONDITION`, stating that the key version is not enabled and its current state is `DISABLED`.
 
-![Encrypt fails](snapshots/06-key-disable-impact/01-disabled-versions-encrypt-fails.png)
+![Encrypt fails](snapshots/05-key-disable-impact/01-disabled-versions-encrypt-fails.png)
 
 **Step 3. Try to open the object.** Downloading `s3.jpeg` returns the message **"Cloud KMS key is disabled, destroyed, or scheduled to be destroyed."**
 
-![Object blocked](snapshots/06-key-disable-impact/03-object-download-blocked.png)
+![Object blocked](snapshots/05-key-disable-impact/03-object-download-blocked.png)
 
 Re-enable the versions to restore access. Disable is reversible. Destroy is not, once the scheduled destruction delay (10 days here) has passed.
 
@@ -277,8 +267,6 @@ Re-enable the versions to restore access. Disable is reversible. Destroy is not,
 ## 4. Part 2: Asymmetric encryption
 
 Asymmetric (public-key) cryptography uses a key pair. The **public key** is shared freely and encrypts. The **private key** never leaves KMS and decrypts.
-
-![Asymmetric encryption theory](snapshots/07-asymmetric-key-creation/01-asymmetric-encryption-theory.png)
 
 ### 4.1 Create the asymmetric key
 
@@ -294,20 +282,20 @@ In `test-ring`, choose *Create key*.
 | Rotation | Not available. Asymmetric keys rotate manually |
 | Scheduled destruction | 10 days |
 
-![Key name](snapshots/07-asymmetric-key-creation/02-key-name-and-protection-level.png)
-![Purpose and algorithm](snapshots/07-asymmetric-key-creation/03-asymmetric-decrypt-rsa-3072-oaep.png)
-![Review](snapshots/07-asymmetric-key-creation/04-destruction-delay-and-review.png)
+![Key name](snapshots/06-asymmetric-key-creation/01-key-name-and-protection-level.png)
+![Purpose and algorithm](snapshots/06-asymmetric-key-creation/02-asymmetric-decrypt-rsa-3072-oaep.png)
+![Review](snapshots/06-asymmetric-key-creation/03-destruction-delay-and-review.png)
 
 After creation, the Overview tab confirms location `us-central1`, purpose *Asymmetric decrypt*, and the algorithm.
 
-![Key overview](snapshots/07-asymmetric-key-creation/05-key-overview.png)
+![Key overview](snapshots/06-asymmetric-key-creation/04-key-overview.png)
 
 ### 4.2 Download the public key
 
 To encrypt with an asymmetric key you need the public key first. On the **Versions** tab, open the actions menu for version 1 and choose **Get public key**, then **Download**.
 
-![Get public key menu](snapshots/07-asymmetric-key-creation/06-versions-get-public-key.png)
-![Public key dialog](snapshots/07-asymmetric-key-creation/07-public-key-dialog.png)
+![Get public key menu](snapshots/06-asymmetric-key-creation/05-versions-get-public-key.png)
+![Public key dialog](snapshots/06-asymmetric-key-creation/06-public-key-dialog.png)
 
 CLI alternative:
 
@@ -325,7 +313,7 @@ Upload the `.pub` file to Cloud Shell (or use the command above) and create a te
 echo "Welcome to Cloud KMS Asymmetric key demo" > test.txt
 ```
 
-![Public key and test file in Cloud Shell](snapshots/08-asymmetric-encrypt-decrypt/01-public-key-and-test-file-in-cloud-shell.png)
+![Public key and test file in Cloud Shell](snapshots/07-asymmetric-encrypt-decrypt/01-public-key-and-test-file-in-cloud-shell.png)
 
 ### 4.3 Encrypt locally with OpenSSL
 
@@ -344,7 +332,7 @@ openssl pkeyutl -in test.txt \
 
 `encrypt.txt` is now unreadable ciphertext.
 
-![OpenSSL encrypt](snapshots/08-asymmetric-encrypt-decrypt/02-openssl-encrypt-with-public-key.png)
+![OpenSSL encrypt](snapshots/07-asymmetric-encrypt-decrypt/02-openssl-encrypt-with-public-key.png)
 
 ### 4.4 Decrypt with KMS
 
@@ -366,12 +354,12 @@ cat decrypt.txt
 
 Create a second version. On the key page choose **Create version** and confirm.
 
-![Create version](snapshots/08-asymmetric-encrypt-decrypt/03-create-new-key-version.png)
-![Confirm](snapshots/08-asymmetric-encrypt-decrypt/04-create-version-confirmation.png)
+![Create version](snapshots/07-asymmetric-encrypt-decrypt/03-create-new-key-version.png)
+![Confirm](snapshots/07-asymmetric-encrypt-decrypt/04-create-version-confirmation.png)
 
 The key now has versions 1 and 2, both enabled. Note there is no *primary* label.
 
-![Two versions](snapshots/08-asymmetric-encrypt-decrypt/05-two-key-versions.png)
+![Two versions](snapshots/07-asymmetric-encrypt-decrypt/05-two-key-versions.png)
 
 `encrypt.txt` was encrypted with the **version 1 public key**. Decrypt it with version 2:
 
@@ -387,17 +375,15 @@ gcloud kms asymmetric-decrypt \
 
 Result: `ERROR: (gcloud.kms.asymmetric-decrypt) INVALID_ARGUMENT: Decryption failed.`
 
-![Wrong version](snapshots/08-asymmetric-encrypt-decrypt/06-decrypt-with-wrong-version-fails.png)
+![Wrong version](snapshots/07-asymmetric-encrypt-decrypt/06-decrypt-with-wrong-version-fails.png)
 
 Switch to `--version 1` and it works, printing `Welcome to Cloud KMS Asymmetric key demo`.
 
-![Right version](snapshots/08-asymmetric-encrypt-decrypt/07-decrypt-with-correct-version-works.png)
+![Right version](snapshots/07-asymmetric-encrypt-decrypt/07-decrypt-with-correct-version-works.png)
 
 **Takeaway.** The ciphertext is bound to the key pair that created the public key. Keep track of which version encrypted what.
 
 Reference for the OpenSSL flags: [Encrypt and decrypt data with an asymmetric key](https://cloud.google.com/kms/docs/encrypt-decrypt-rsa).
-
-![Google docs reference](snapshots/08-asymmetric-encrypt-decrypt/08-google-docs-openssl-reference.png)
 
 ---
 
@@ -410,8 +396,6 @@ A digital signature proves **who** signed data and that it was **not changed**. 
 3. The signer sends the data and the signature to the recipient.
 4. The recipient verifies with the public key. If verification fails, the data was altered.
 
-![Digital signature theory](snapshots/09-digital-signatures/01-digital-signature-theory.png)
-
 ### 5.1 Create the signing key
 
 | Setting | Value |
@@ -421,12 +405,12 @@ A digital signature proves **who** signed data and that it was **not changed**. 
 | Purpose | **Asymmetric sign** |
 | Algorithm | **Elliptic Curve P-256 - SHA256 Digest** (128 bits of security) |
 
-![Signing key name](snapshots/09-digital-signatures/02-signing-key-name.png)
-![Purpose and algorithm](snapshots/09-digital-signatures/03-asymmetric-sign-ec-p256-sha256.png)
+![Signing key name](snapshots/08-digital-signatures/01-signing-key-name.png)
+![Purpose and algorithm](snapshots/08-digital-signatures/02-asymmetric-sign-ec-p256-sha256.png)
 
 Then download the public key from *Versions → actions → Get public key*.
 
-![Get public key](snapshots/09-digital-signatures/04-get-public-key.png)
+![Get public key](snapshots/08-digital-signatures/03-get-public-key.png)
 
 ```bash
 gcloud kms keys versions get-public-key 1 \
@@ -465,7 +449,7 @@ openssl dgst \
 
 Output: `Verified OK`
 
-![Sign and verify OK](snapshots/09-digital-signatures/05-sign-and-verify-ok.png)
+![Sign and verify OK](snapshots/08-digital-signatures/04-sign-and-verify-ok.png)
 
 ### 5.3 Tamper with the file
 
@@ -475,7 +459,7 @@ Edit `test.txt` (the demo appends the line `Tempared file`) and run the same ver
 Verification failure
 ```
 
-![Verification failure](snapshots/09-digital-signatures/06-tampered-file-verification-failure.png)
+![Verification failure](snapshots/08-digital-signatures/05-tampered-file-verification-failure.png)
 
 **Real-world use.** When you share a file over the internet, send the file together with `sign.txt`. The recipient verifies it with your public key (`.pub`) and knows the file is yours and unmodified. The same pattern secures code, container images (Binary Authorization) and JWTs.
 
@@ -490,9 +474,6 @@ A MAC (message authentication code) also verifies integrity and authenticity, bu
 3. The signer sends the data and the tag.
 4. The recipient verifies the tag with the same key. If it fails, the data was altered.
 
-![Key purposes with MAC](snapshots/10-mac-signatures/01-key-purposes-mac-highlighted.png)
-![MAC theory](snapshots/10-mac-signatures/02-mac-signature-theory.png)
-
 ### 6.1 Create the MAC key
 
 | Setting | Value |
@@ -504,11 +485,11 @@ A MAC (message authentication code) also verifies integrity and authenticity, bu
 | Rotation | Not available for MAC keys |
 | Scheduled destruction | 10 days |
 
-![Create MAC key](snapshots/10-mac-signatures/03-create-mac-key-hmac-sha256.png)
+![Create MAC key](snapshots/09-mac-signatures/01-create-mac-key-hmac-sha256.png)
 
 The version's action menu offers only *Disable*, *Destroy* and *Copy resource name*. There is no *Get public key*.
 
-![MAC key version](snapshots/10-mac-signatures/04-mac-key-version-no-public-key.png)
+![MAC key version](snapshots/09-mac-signatures/02-mac-key-version-no-public-key.png)
 
 ### 6.2 Sign
 
@@ -527,7 +508,7 @@ gcloud kms mac-sign \
 
 `mac.txt` holds the binary MAC tag.
 
-![MAC sign](snapshots/10-mac-signatures/05-mac-sign.png)
+![MAC sign](snapshots/09-mac-signatures/03-mac-sign.png)
 
 ### 6.3 Verify
 
@@ -543,13 +524,13 @@ gcloud kms mac-verify \
 
 Output: `True`
 
-![MAC verify](snapshots/10-mac-signatures/06-mac-verify-true.png)
+![MAC verify](snapshots/09-mac-signatures/04-mac-verify-true.png)
 
 ### 6.4 Alter the file and verify again
 
 Edit `mac-sign` (the demo adds the line `Altered File`) and repeat the verify command. The result is **no `True`**; the demo shows `None`, so the check fails.
 
-![Altered file](snapshots/10-mac-signatures/07-altered-file-verify-fails.png)
+![Altered file](snapshots/09-mac-signatures/05-altered-file-verify-fails.png)
 
 ### 6.5 Two ways to prove a file was not altered
 
@@ -648,4 +629,3 @@ gcloud kms keys versions enable  2 --key symmetric-key --keyring $KEYRING --loca
 - [Cloud KMS documentation](https://cloud.google.com/kms/docs)
 - [Encrypt and decrypt data with an asymmetric key](https://cloud.google.com/kms/docs/encrypt-decrypt-rsa)
 - [Customer-managed encryption keys (CMEK)](https://cloud.google.com/kms/docs/cmek)
-- Source video series (theory slides): Part 1 [symmetric](https://www.youtube.com/watch?v=oJHOM_b_g6Y), Part 2 [asymmetric](https://www.youtube.com/watch?v=jVfHXTY-glw), Part 3 [digital signatures](https://www.youtube.com/watch?v=kVy4ppKsxxY), Part 4 [MAC](https://www.youtube.com/watch?v=xXFcLXqBv4k)
