@@ -11,7 +11,7 @@ A practical walkthrough of Google Cloud KMS, built from scratch and proved with 
 
 ---
 
-## ❓ Why Cloud KMS?
+## 📖 Introduction
 
 Google already encrypts your data at rest by default, and you never touch those keys. That is enough for many workloads. Sooner or later, though, a security review asks the same question: *who controls the encryption keys?*
 
