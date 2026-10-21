@@ -16,7 +16,7 @@
 
 *A real, hands-on tour of **Google Cloud KMS**: create a key ring and keys, **encrypt and decrypt** with `gcloud`, **rotate** keys and watch key versions, protect a Cloud Storage bucket with a **customer-managed key (CMEK)**, see what happens when a key is **disabled**, then use **asymmetric keys** for encryption and **digital signatures**, and a **MAC key** for integrity checks. Every step is backed by real GCP Console and Cloud Shell screenshots.*
 
-📝 **Companion article on Medium:** [GCP Cloud KMS Explained With Real Demos: Encryption, Key Rotation, CMEK, Digital Signatures and MAC](https://medium.com/@bikram23march/gcp-cloud-kms-explained-with-real-demos-af4d20aa5168)
+📝 **Medium Article:** [GCP Cloud KMS Explained With Real Demos: Encryption, Key Rotation, CMEK, Digital Signatures and MAC](https://medium.com/@bikram23march/gcp-cloud-kms-explained-with-real-demos-af4d20aa5168)
 
 ![gcp-cloud-kms-encryption architecture](docs/snapshots/00-architecture/gcp-cloud-kms-architecture.png)
 
