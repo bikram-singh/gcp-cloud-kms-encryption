@@ -2,8 +2,7 @@
 
 Hands-on lab covering the four things you can do with Google Cloud KMS keys: **symmetric encryption**, **asymmetric encryption**, **digital signatures** and **MAC signatures**. It also shows key rotation, key versions, CMEK on Cloud Storage and what happens when a key is disabled.
 
-Companion article on Medium: *Cloud KMS on GCP, Hands-On: Encrypt, Rotate, Sign and Verify With Your Own Keys* (add the link here once published).
-
+   Companion article on Medium: [Cloud KMS on GCP, Hands-On: Encrypt, Rotate, Sign and Verify With Your Own Keys](https://medium.com/@YOUR_HANDLE/YOUR-ARTICLE-SLUG)
 ## What you will build
 
 ```mermaid
