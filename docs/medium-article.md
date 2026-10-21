@@ -1,9 +1,7 @@
 <!--
 PUBLISHING NOTES
-Each "Show Image ..." line is an image placeholder. Upload the matching file in Medium:
- - Table images: docs/article/01..08 (01 Key Facts, 02 What Makes This Different, 03 Benefits, 04 Four keys, 05 What was built, 06 Key purpose, 07 Gotchas, 08 Observations)
- - Architecture: docs/snapshots/00-architecture/gcp-cloud-kms-architecture.png
- - Screenshots: docs/snapshots/01..09-*/ (names match the captions)
+Images are real markdown links (raw GitHub URLs) so GitHub renders them and Medium's Import a story can fetch them.
+Table images: docs/article/01..08. Screenshots: docs/snapshots/01..09-*/. Architecture: docs/snapshots/00-architecture/.
 -->
 
 # GCP Cloud KMS Explained With Real Demos
@@ -14,7 +12,7 @@ Each "Show Image ..." line is an image placeholder. Upload the matching file in 
 
 A practical walkthrough of Google Cloud KMS, built from scratch and proved with real commands: symmetric encryption, key rotation and key versions, a Cloud Storage bucket protected with a customer-managed key, what happens when you disable that key, asymmetric encryption, digital signatures and MAC signatures. Every step is backed by screenshots from the GCP Console and Cloud Shell.
 
-Show Image GCP Cloud KMS architecture: one key ring, four keys, and the steps (including the failures) for each
+![GCP Cloud KMS architecture: one key ring, four keys, and the steps (including the failures) for each](https://raw.githubusercontent.com/bikram-singh/gcp-cloud-kms-encryption/main/docs/snapshots/00-architecture/gcp-cloud-kms-architecture.png)
 
 ---
 
@@ -28,15 +26,15 @@ KMS keys come in four flavours, and the docs describe them separately. I wanted 
 
 ## 🔑 Key Facts
 
-Show Image Key Facts
+![Key Facts](https://raw.githubusercontent.com/bikram-singh/gcp-cloud-kms-encryption/main/docs/article/01-key-facts.png)
 
 ## ✨ What Makes This Different
 
-Show Image What Makes This Different
+![What Makes This Different](https://raw.githubusercontent.com/bikram-singh/gcp-cloud-kms-encryption/main/docs/article/02-what-makes-different.png)
 
 ## 💡 Why customer-managed keys: the benefits, mapped to what I built
 
-Show Image Why customer-managed keys: the benefits mapped to what I built
+![Why customer-managed keys: the benefits mapped to what I built](https://raw.githubusercontent.com/bikram-singh/gcp-cloud-kms-encryption/main/docs/article/03-why-customer-managed-keys.png)
 
 ## 🏛️ Architecture
 
@@ -64,7 +62,7 @@ Show Image Why customer-managed keys: the benefits mapped to what I built
 
 Four keys, four different jobs. Here is how they compare:
 
-Show Image The four keys compared
+![The four keys compared](https://raw.githubusercontent.com/bikram-singh/gcp-cloud-kms-encryption/main/docs/article/04-the-four-keys.png)
 
 ## 🧠 The concepts you need (five minutes of theory)
 
@@ -109,11 +107,11 @@ Show Image The four keys compared
 
 I used a free-trial project and Cloud Shell for every command. First, enable the Cloud KMS API, either from the Marketplace page or with `gcloud services enable cloudkms.googleapis.com`.
 
-Show Image Enabling the Cloud KMS API
+![Enabling the Cloud KMS API](https://raw.githubusercontent.com/bikram-singh/gcp-cloud-kms-encryption/main/docs/snapshots/01-symmetric-key-creation/01-enable-kms-api.png)
 
 Then, under **Security → Key Management**, create the key ring `test-ring` in `us-central1`.
 
-Show Image Creating the key ring
+![Creating the key ring](https://raw.githubusercontent.com/bikram-singh/gcp-cloud-kms-encryption/main/docs/snapshots/01-symmetric-key-creation/02-create-key-ring.png)
 
 🔍 **Key behavior I found.** The key ring is tied to its location and cannot be deleted later. Pick the name and the location on purpose.
 
@@ -128,17 +126,17 @@ Inside `test-ring`, I created a key with these settings:
 - Rotation: every 90 days
 - Scheduled destruction: 10 days
 
-Show Image Key name and protection level
+![Key name and protection level](https://raw.githubusercontent.com/bikram-singh/gcp-cloud-kms-encryption/main/docs/snapshots/01-symmetric-key-creation/03-key-name-and-protection-level.png)
 
-Show Image Symmetric purpose and algorithm
+![Symmetric purpose and algorithm](https://raw.githubusercontent.com/bikram-singh/gcp-cloud-kms-encryption/main/docs/snapshots/01-symmetric-key-creation/07-symmetric-purpose-and-algorithm.png)
 
-Show Image The rotation summary spells out the schedule
+![The rotation summary spells out the schedule](https://raw.githubusercontent.com/bikram-singh/gcp-cloud-kms-encryption/main/docs/snapshots/01-symmetric-key-creation/09-rotation-summary-90-days.png)
 
-Show Image Scheduled destruction set to 10 days
+![Scheduled destruction set to 10 days](https://raw.githubusercontent.com/bikram-singh/gcp-cloud-kms-encryption/main/docs/snapshots/01-symmetric-key-creation/10-scheduled-destruction-delay-10-days.png)
 
 The result is a key that shows as **Available**.
 
-Show Image The key is available in the key ring
+![The key is available in the key ring](https://raw.githubusercontent.com/bikram-singh/gcp-cloud-kms-encryption/main/docs/snapshots/01-symmetric-key-creation/11-key-available-in-key-ring.png)
 
 Equivalent CLI, for reference (I used the console for the build, so check the flags against `--help` before relying on them):
 
@@ -172,7 +170,7 @@ gcloud kms encrypt \
   --plaintext-file test.txt --ciphertext-file encrypt.txt
 ```
 
-Show Image encrypt.txt is unreadable binary
+![encrypt.txt is unreadable binary](https://raw.githubusercontent.com/bikram-singh/gcp-cloud-kms-encryption/main/docs/snapshots/02-symmetric-encrypt-decrypt/01-encrypt-with-gcloud.png)
 
 Decrypting returns the original text:
 
@@ -185,7 +183,7 @@ cat decrypt.txt
 # Welcome to Cloud KMS Demo
 ```
 
-Show Image Decrypting gives back the original text
+![Decrypting gives back the original text](https://raw.githubusercontent.com/bikram-singh/gcp-cloud-kms-encryption/main/docs/snapshots/02-symmetric-encrypt-decrypt/02-decrypt-with-gcloud.png)
 
 🔍 **Key behavior I found.** I never passed a key version. KMS reads it from the ciphertext when decrypting, and uses the primary version when encrypting. That matters in the next part.
 
@@ -193,11 +191,11 @@ Show Image Decrypting gives back the original text
 
 Rotation creates a new key version and makes it primary, so new data uses fresh key material. On the key's **Versions** tab, click **Rotate key**.
 
-Show Image The rotate dialog explains what will happen
+![The rotate dialog explains what will happen](https://raw.githubusercontent.com/bikram-singh/gcp-cloud-kms-encryption/main/docs/snapshots/03-key-rotation/02-rotate-key-dialog.png)
 
 After rotating, version 2 is **Enabled & primary** and version 1 stays **Enabled**.
 
-Show Image Version 2 is primary, version 1 is still enabled
+![Version 2 is primary, version 1 is still enabled](https://raw.githubusercontent.com/bikram-singh/gcp-cloud-kms-encryption/main/docs/snapshots/03-key-rotation/03-version-2-enabled-and-primary.png)
 
 Now the real test. `encrypt.txt` was created with version 1. I decrypted it again after rotation:
 
@@ -210,7 +208,7 @@ cat decrypt-2.txt
 # Welcome to Cloud KMS Demo
 ```
 
-Show Image Old ciphertext still decrypts after rotation
+![Old ciphertext still decrypts after rotation](https://raw.githubusercontent.com/bikram-singh/gcp-cloud-kms-encryption/main/docs/snapshots/03-key-rotation/04-decrypt-old-ciphertext-after-rotation.png)
 
 🔍 **Key behaviors I found**
 
@@ -224,19 +222,19 @@ This is the real use case. I created `cloud-kms-demo-bucket` and, under **Data e
 
 **Gotcha 1: location.** My key is in `us-central1`. When I first tried a bucket in `us-east1`, the key picker said *No valid keys found*, with the filter showing the purpose and the location. A CMEK key must be in the same location as the resource.
 
-Show Image Key in us-central1, bucket in us-east1: no valid keys
+![Key in us-central1, bucket in us-east1: no valid keys](https://raw.githubusercontent.com/bikram-singh/gcp-cloud-kms-encryption/main/docs/snapshots/04-cmek-cloud-storage/01-bucket-region-mismatch-no-valid-keys.png)
 
 **Gotcha 2: the service agent.** With the right region and key selected, the console warned that the Cloud Storage service agent did not have the `cloudkms.cryptoKeyEncrypterDecrypter` role on the key. I clicked **Grant**.
 
-Show Image Granting the service agent access to the key
+![Granting the service agent access to the key](https://raw.githubusercontent.com/bikram-singh/gcp-cloud-kms-encryption/main/docs/snapshots/04-cmek-cloud-storage/02-grant-service-agent-encrypter-decrypter.png)
 
 Once the bucket was created, the **Protection** section showed *Customer-managed*, with a link to the key.
 
-Show Image The bucket uses a customer-managed key
+![The bucket uses a customer-managed key](https://raw.githubusercontent.com/bikram-singh/gcp-cloud-kms-encryption/main/docs/snapshots/04-cmek-cloud-storage/03-bucket-encryption-customer-managed.png)
 
 I uploaded two objects, and each one reported its own key version:
 
-Show Image Object details name the exact key version used
+![Object details name the exact key version used](https://raw.githubusercontent.com/bikram-singh/gcp-cloud-kms-encryption/main/docs/snapshots/04-cmek-cloud-storage/05-object-details-key-version.png)
 
 🔍 **Key behaviors I found**
 
@@ -248,17 +246,17 @@ Show Image Object details name the exact key version used
 
 This is why people choose CMEK. I disabled both key versions on the **Versions** tab, and the key status flipped to **Not available**.
 
-Show Image With both versions disabled the key is not available
+![With both versions disabled the key is not available](https://raw.githubusercontent.com/bikram-singh/gcp-cloud-kms-encryption/main/docs/snapshots/05-key-disable-impact/02-key-status-not-available.png)
 
 Encrypting from the CLI now failed with `FAILED_PRECONDITION`, because the key version is `DISABLED`.
 
-Show Image gcloud kms encrypt fails on a disabled key
+![gcloud kms encrypt fails on a disabled key](https://raw.githubusercontent.com/bikram-singh/gcp-cloud-kms-encryption/main/docs/snapshots/05-key-disable-impact/01-disabled-versions-encrypt-fails.png)
 
 And opening the object in the bucket returned this:
 
 > Cloud KMS key is disabled, destroyed, or scheduled to be destroyed.
 
-Show Image The object cannot be read while the key is disabled
+![The object cannot be read while the key is disabled](https://raw.githubusercontent.com/bikram-singh/gcp-cloud-kms-encryption/main/docs/snapshots/05-key-disable-impact/03-object-download-blocked.png)
 
 🔍 **Key behavior I found.** Disabling is reversible: enable the versions again and access returns. Destroying is not, once the scheduled delay passes. Treat key disable and destroy events as alert-worthy.
 
@@ -268,7 +266,7 @@ With asymmetric keys there is a **key pair**. The public key encrypts and can be
 
 I created `asymmetric-key-decrypt` with purpose **Asymmetric decrypt** and algorithm **3072 bit RSA - OAEP Padding - SHA256 Digest**. The console states that automatic rotation is not available for asymmetric keys.
 
-Show Image Asymmetric decrypt with RSA 3072 and OAEP
+![Asymmetric decrypt with RSA 3072 and OAEP](https://raw.githubusercontent.com/bikram-singh/gcp-cloud-kms-encryption/main/docs/snapshots/06-asymmetric-key-creation/02-asymmetric-decrypt-rsa-3072-oaep.png)
 
 To encrypt, you first need the public key. On the **Versions** tab, open the action menu and choose **Get public key**, then download it. The CLI does the same:
 
@@ -278,7 +276,7 @@ gcloud kms keys versions get-public-key 1 \
   --output-file test-ring-asymmetric-key-decrypt-1.pub
 ```
 
-Show Image Get public key from the version's action menu
+![Get public key from the version's action menu](https://raw.githubusercontent.com/bikram-singh/gcp-cloud-kms-encryption/main/docs/snapshots/06-asymmetric-key-creation/05-versions-get-public-key.png)
 
 Encryption happens locally with OpenSSL. KMS is not involved at all, which is the point:
 
@@ -291,7 +289,7 @@ openssl pkeyutl -in test.txt -encrypt -pubin \
   > encrypt.txt
 ```
 
-Show Image Encrypting with the public key using OpenSSL
+![Encrypting with the public key using OpenSSL](https://raw.githubusercontent.com/bikram-singh/gcp-cloud-kms-encryption/main/docs/snapshots/07-asymmetric-encrypt-decrypt/02-openssl-encrypt-with-public-key.png)
 
 Decryption has to go through KMS. Because there is no primary version, I must say which one:
 
@@ -304,7 +302,7 @@ gcloud kms asymmetric-decrypt \
 
 To see why that matters, I created a second version of the key. Both versions are enabled, and neither is labelled primary.
 
-Show Image Two versions and no primary
+![Two versions and no primary](https://raw.githubusercontent.com/bikram-singh/gcp-cloud-kms-encryption/main/docs/snapshots/07-asymmetric-encrypt-decrypt/05-two-key-versions.png)
 
 `encrypt.txt` was encrypted with the version 1 public key. Decrypting with `--version 2` failed:
 
@@ -312,11 +310,11 @@ Show Image Two versions and no primary
 ERROR: (gcloud.kms.asymmetric-decrypt) INVALID_ARGUMENT: Decryption failed.
 ```
 
-Show Image The wrong version fails
+![The wrong version fails](https://raw.githubusercontent.com/bikram-singh/gcp-cloud-kms-encryption/main/docs/snapshots/07-asymmetric-encrypt-decrypt/06-decrypt-with-wrong-version-fails.png)
 
 Switching back to `--version 1` worked.
 
-Show Image The right version decrypts the file
+![The right version decrypts the file](https://raw.githubusercontent.com/bikram-singh/gcp-cloud-kms-encryption/main/docs/snapshots/07-asymmetric-encrypt-decrypt/07-decrypt-with-correct-version-works.png)
 
 🔍 **Key behaviors I found**
 
@@ -330,7 +328,7 @@ A digital signature answers two questions: *who produced this?* and *was it chan
 
 I created `asymmetric-sign` with purpose **Asymmetric sign** and algorithm **Elliptic Curve P-256 - SHA256 Digest**, then downloaded its public key the same way as before.
 
-Show Image Signing key: Elliptic Curve P-256 with SHA-256
+![Signing key: Elliptic Curve P-256 with SHA-256](https://raw.githubusercontent.com/bikram-singh/gcp-cloud-kms-encryption/main/docs/snapshots/08-digital-signatures/02-asymmetric-sign-ec-p256-sha256.png)
 
 Sign in KMS, verify anywhere with OpenSSL:
 
@@ -348,7 +346,7 @@ openssl dgst -sha256 \
 
 The output is `Verified OK`.
 
-Show Image The signature verifies with the public key
+![The signature verifies with the public key](https://raw.githubusercontent.com/bikram-singh/gcp-cloud-kms-encryption/main/docs/snapshots/08-digital-signatures/04-sign-and-verify-ok.png)
 
 Then I appended one line to `test.txt` and ran the same verify command:
 
@@ -356,7 +354,7 @@ Then I appended one line to `test.txt` and ran the same verify command:
 Verification failure
 ```
 
-Show Image One changed line breaks the signature
+![One changed line breaks the signature](https://raw.githubusercontent.com/bikram-singh/gcp-cloud-kms-encryption/main/docs/snapshots/08-digital-signatures/05-tampered-file-verification-failure.png)
 
 🔍 **Key behavior I found.** In practice, you publish the file, the signature and your public key. Anyone can then check that the file is yours and unmodified. The same pattern secures binaries, container images and tokens.
 
@@ -366,7 +364,7 @@ A MAC gives you integrity and authenticity too, but with a **shared secret** ins
 
 I created `mac-key` with purpose **MAC signing/verification** and algorithm **HMAC - SHA256 Digest**. Then I looked at the version's action menu: *Disable*, *Destroy* and *Copy resource name*, but no *Get public key*.
 
-Show Image No Get public key option on a MAC key
+![No Get public key option on a MAC key](https://raw.githubusercontent.com/bikram-singh/gcp-cloud-kms-encryption/main/docs/snapshots/09-mac-signatures/02-mac-key-version-no-public-key.png)
 
 Signing and verifying:
 
@@ -384,11 +382,11 @@ gcloud kms mac-verify \
 
 The verify command printed `True`.
 
-Show Image MAC verification returns True
+![MAC verification returns True](https://raw.githubusercontent.com/bikram-singh/gcp-cloud-kms-encryption/main/docs/snapshots/09-mac-signatures/04-mac-verify-true.png)
 
 After I edited the file and verified again, the result was no longer `True` (the CLI printed `None`), so the change was caught.
 
-Show Image Altered file: the MAC check fails
+![Altered file: the MAC check fails](https://raw.githubusercontent.com/bikram-singh/gcp-cloud-kms-encryption/main/docs/snapshots/09-mac-signatures/05-altered-file-verify-fails.png)
 
 🔍 **Key behaviors I found**
 
@@ -398,17 +396,17 @@ Show Image Altered file: the MAC check fails
 
 ## 🧭 Which key purpose should you use?
 
-Show Image Which key purpose should you use
+![Which key purpose should you use](https://raw.githubusercontent.com/bikram-singh/gcp-cloud-kms-encryption/main/docs/article/06-which-key-purpose.png)
 
 ## 🧾 Cheat sheet: gotchas worth remembering
 
-Show Image Cheat sheet: gotchas worth remembering
+![Cheat sheet: gotchas worth remembering](https://raw.githubusercontent.com/bikram-singh/gcp-cloud-kms-encryption/main/docs/article/07-gotchas.png)
 
 ## 🕵️ Observations from the build
 
 These came up while building it, not from the docs:
 
-Show Image Observations from the build
+![Observations from the build](https://raw.githubusercontent.com/bikram-singh/gcp-cloud-kms-encryption/main/docs/article/08-observations.png)
 
 ## 🔒 Security habits worth adopting
 
@@ -440,7 +438,7 @@ All 50 screenshots from this build, sorted by step, are in the repository under 
 
 ## 🎯 Wrapping up
 
-Show Image What was built and proved
+![What was built and proved](https://raw.githubusercontent.com/bikram-singh/gcp-cloud-kms-encryption/main/docs/article/05-what-was-built.png)
 
 The mental model is simple: pick the purpose first, then everything else follows. Symmetric keys encrypt and power CMEK. Asymmetric keys encrypt for outsiders and sign for everyone. MAC keys check integrity between trusted parties. The hard part is rarely a single command. It is the details around them: the key location, the service-agent permission, the key version you must remember, and what disabling a key does to your data.
 
